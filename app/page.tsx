@@ -5,6 +5,8 @@ import { Seal } from "@/components/seal";
 import { Wordmark } from "@/components/wordmark";
 import { getCurrentUser } from "@/providers/auth/session";
 
+import { LogoutButton } from "./logout-button";
+
 export const dynamic = "force-dynamic";
 
 const sites = [
@@ -54,25 +56,8 @@ export default async function HomePage() {
           </ul>
         </div>
 
-        <form action="/api/logout" method="post">
-          <LogoutButton />
-        </form>
+        <LogoutButton />
       </section>
     </main>
-  );
-}
-
-function LogoutButton() {
-  return (
-    <button
-      type="button"
-      onClick={async () => {
-        await fetch("/api/logout", { method: "POST" });
-        window.location.href = "/login";
-      }}
-      className="font-mono text-sm text-muted underline underline-offset-2 transition-colors hover:text-accent"
-    >
-      退出登录
-    </button>
   );
 }
