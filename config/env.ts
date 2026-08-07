@@ -14,6 +14,9 @@ const envSchema = z.object({
   /** cookie 作用域父域，子域共享登录态 */
   SESSION_COOKIE_DOMAIN: z.string().trim().min(1).optional(),
   SESSION_TTL_DAYS: z.coerce.number().int().min(1).max(90).default(30),
+  /** GitHub OAuth App 凭据（GitHub 登录用） */
+  GITHUB_CLIENT_ID: z.string().min(1),
+  GITHUB_CLIENT_SECRET: z.string().min(1),
 });
 
 export type ServerEnv = z.infer<typeof envSchema>;

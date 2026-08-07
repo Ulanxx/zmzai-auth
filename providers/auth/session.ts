@@ -1,16 +1,17 @@
-import { createHash, randomBytes } from "node:crypto";
-
 import { cookies } from "next/headers";
 
 import { getServerEnv, requireAuthSecret } from "@/config/env";
 import { connectMongo } from "@/providers/database/mongodb/connection";
-import { SessionModel } from "@/providers/database/mongodb/models/session";
 import {
-  UserModel,
+  AccountModel,
   type UserDocument,
+  hashToken,
+  generateToken,
+  SessionModel,
+  UserModel,
   type UserRole,
   type UserStatus,
-} from "@/providers/database/mongodb/models/user";
+} from "@zmzai/db";
 
 export interface CurrentUser {
   id: string;
@@ -21,10 +22,8 @@ export interface CurrentUser {
   emailVerified: boolean;
 }
 
-function hashToken(token: string): string {
-  const secret = requireAuthSecret();
-  return createHash("sha256").update(`${secret}:${token}`).digest("hex");
-}
+/** @zmzai/db 的 AccountModel 重新导出，供 OAuth 路由复用同一连接后的 model。 */
+export { AccountModel };
 
 function toAccount(user: UserDocument): CurrentUser {
   return {
@@ -41,14 +40,14 @@ function toAccount(user: UserDocument): CurrentUser {
 export async function createSession(user: UserDocument): Promise<void> {
   await connectMongo();
   const env = getServerEnv();
-  const token = randomBytes(32).toString("base64url");
+  const token = generateToken();
   const expiresAt = new Date(
     Date.now() + env.SESSION_TTL_DAYS * 24 * 60 * 60 * 1_000,
   );
 
   await SessionModel.create({
     userId: user._id,
-    tokenHash: hashToken(token),
+    tokenHash: hashToken(requireAuthSecret(), token),
     expiresAt,
     lastSeenAt: new Date(),
   });
@@ -70,7 +69,9 @@ export async function destroySession(): Promise<void> {
   const token = cookieStore.get(env.SESSION_COOKIE_NAME)?.value;
   if (token) {
     await connectMongo();
-    await SessionModel.deleteOne({ tokenHash: hashToken(token) });
+    await SessionModel.deleteOne({
+      tokenHash: hashToken(requireAuthSecret(), token),
+    });
   }
   cookieStore.set(env.SESSION_COOKIE_NAME, "", {
     httpOnly: true,
@@ -89,7 +90,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   await connectMongo();
   const session = await SessionModel.findOne({
-    tokenHash: hashToken(token),
+    tokenHash: hashToken(requireAuthSecret(), token),
     expiresAt: { $gt: new Date() },
   });
   if (!session) return null;
