@@ -3,8 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { createSession } from "@/providers/auth/session";
+import { safeNext } from "@/providers/auth/redirect";
 import { connectMongo } from "@/providers/database/mongodb/connection";
-import { UserModel } from "@/providers/database/mongodb/models/user";
+import { UserModel } from "@zmzai/db";
 
 export const dynamic = "force-dynamic";
 
@@ -18,21 +19,6 @@ const loginSchema = z
 
 function err(message: string, status: number, code?: string) {
   return NextResponse.json({ error: message, code }, { status });
-}
-
-/** next 白名单：只允许 zmzai.cloud 域，防开放重定向。 */
-function safeNext(next: string | undefined): string {
-  if (!next) return "/";
-  try {
-    const url = new URL(next);
-    if (url.hostname === "zmzai.cloud" || url.hostname.endsWith(".zmzai.cloud")) {
-      return next;
-    }
-  } catch {
-    // 相对路径允许
-    if (next.startsWith("/")) return next;
-  }
-  return "/";
 }
 
 // 简单内存限流（常驻进程下有效；serverless 多实例需 Redis）
@@ -65,11 +51,16 @@ export async function POST(req: NextRequest) {
     "+passwordHash",
   );
 
-  if (
-    !user ||
-    user.status !== "active" ||
-    !(await bcrypt.compare(parsed.data.password, user.passwordHash))
-  ) {
+  if (!user || user.status !== "active") {
+    return err("邮箱或密码错误", 401);
+  }
+
+  // OAuth-only 账号：passwordHash 是不可用占位（"!" 前缀，非 bcrypt 格式）
+  if (user.passwordHash.startsWith("!")) {
+    return err("该账号通过 GitHub 登录，请使用 GitHub 登录", 403, "OAUTH_ONLY");
+  }
+
+  if (!(await bcrypt.compare(parsed.data.password, user.passwordHash))) {
     return err("邮箱或密码错误", 401);
   }
 

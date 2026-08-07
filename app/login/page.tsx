@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { Wordmark } from "@/components/wordmark";
 
@@ -9,10 +9,29 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/";
+  const paramError = searchParams.get("error");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // OAuth 回调失败时把 ?error= 映射成中文提示
+  useEffect(() => {
+    if (!paramError) return;
+    const map: Record<string, string> = {
+      github_invalid_request: "GitHub 登录请求无效",
+      github_invalid_state: "GitHub 登录状态已过期，请重试",
+      github_state_mismatch: "GitHub 登录状态校验失败，请重试",
+      github_exchange_failed: "GitHub 授权失败，请重试",
+      github_no_verified_email: "你的 GitHub 账号没有已验证的主邮箱，无法登录",
+      github_resolve_failed: "GitHub 账号解析失败，请重试",
+      github_rate_limited: "GitHub 登录尝试过多，请稍后再试",
+      account_disabled: "账号已禁用",
+    };
+    setError(map[paramError] ?? "登录失败");
+  }, [paramError]);
+
+  const githubHref = `/api/auth/github?next=${encodeURIComponent(next)}`;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,6 +93,19 @@ function LoginForm() {
       <button type="submit" disabled={busy} className="btn-primary justify-center disabled:opacity-50">
         {busy ? "登录中…" : "登录"}
       </button>
+
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-line" />
+        <span className="text-xs text-muted">或</span>
+        <span className="h-px flex-1 bg-line" />
+      </div>
+
+      <a
+        href={githubHref}
+        className="flex justify-center border border-line bg-paper px-3 py-2.5 text-sm transition-colors hover:bg-surface"
+      >
+        使用 GitHub 登录
+      </a>
 
       <p className="text-center text-xs text-muted">
         还没有账号？{" "}

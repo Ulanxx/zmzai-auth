@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@zmzai/db':
+        specifier: github:Ulanxx/zmzai-db#main
+        version: git+https://git@github.com:Ulanxx/zmzai-db.git#54b495dbe8cb642bc2d1b233f4ee13902e15a2d4(mongoose@8.24.1)
       bcryptjs:
         specifier: 3.0.3
         version: 3.0.3
@@ -393,6 +396,12 @@ packages:
 
   '@types/whatwg-url@11.0.5':
     resolution: {integrity: sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==}
+
+  '@zmzai/db@git+https://git@github.com:Ulanxx/zmzai-db.git#54b495dbe8cb642bc2d1b233f4ee13902e15a2d4':
+    resolution: {commit: 54b495dbe8cb642bc2d1b233f4ee13902e15a2d4, repo: git@github.com:Ulanxx/zmzai-db.git, type: git}
+    version: 0.1.0
+    peerDependencies:
+      mongoose: ^8.24.0
 
   bcryptjs@3.0.3:
     resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
@@ -927,6 +936,10 @@ snapshots:
   '@types/whatwg-url@11.0.5':
     dependencies:
       '@types/webidl-conversions': 7.0.3
+
+  '@zmzai/db@git+https://git@github.com:Ulanxx/zmzai-db.git#54b495dbe8cb642bc2d1b233f4ee13902e15a2d4(mongoose@8.24.1)':
+    dependencies:
+      mongoose: 8.24.1
 
   bcryptjs@3.0.3: {}
 
