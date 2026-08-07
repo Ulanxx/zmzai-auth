@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@zmzai/db": "github:Ulanxx/zmzai-db#main",
+    "@zmzai/db": "git+https://github.com/Ulanxx/zmzai-db.git",
     "bcryptjs": "3.0.3",
     "mongoose": "8.24.1",
     "next": "15.5.21",
