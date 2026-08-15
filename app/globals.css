@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* theme 组件源码直发：必须扫描 node_modules 才能生成其 tailwind 工具类
+   （否则 Input/Button 等只有默认样式，输入框会"裸奔"） */
+@source "../node_modules/@zmzai/theme/src/**/*.{ts,tsx}";
 
 /* zmzai cloud 牧之 — tokens.css is the source of truth.
    Locked via Hallmark Study; see design.md. Warm paper, warm ink,
