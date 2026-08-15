@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { Seal } from "@/components/seal";
-import { Wordmark } from "@/components/wordmark";
+import { Logo, Wordmark } from "@zmzai/theme";
 import { getCurrentUser } from "@/providers/auth/session";
 import { safeNext } from "@/providers/auth/redirect";
 
@@ -25,7 +24,7 @@ export default async function RegisterPage({
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-10 px-5 py-16">
       <div className="flex flex-col items-center gap-3">
-        <Seal size={56} />
+        <Logo size={56} />
         <Wordmark className="text-lg" />
       </div>
       <RegisterForm next={next} />
