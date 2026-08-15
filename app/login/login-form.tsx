@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { Button, buttonVariants, Input } from "@zmzai/theme";
+
 export function LoginForm({ next, error: paramError }: { next: string; error?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,35 +59,33 @@ export function LoginForm({ next, error: paramError }: { next: string; error?: s
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-muted">邮箱</span>
-        <input
+        <Input
           type="email"
           required
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-line bg-paper px-3 py-2.5"
           placeholder="you@example.com"
         />
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-muted">密码</span>
-        <input
+        <Input
           type="password"
           required
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border border-line bg-paper px-3 py-2.5"
           placeholder="••••••••"
         />
       </label>
 
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
-      <button type="submit" disabled={busy} className="btn-primary justify-center disabled:opacity-50">
+      <Button type="submit" disabled={busy} className="w-full justify-center">
         {busy ? "登录中…" : "登录"}
-      </button>
+      </Button>
 
       <div className="flex items-center gap-3">
         <span className="h-px flex-1 bg-line" />
@@ -93,10 +93,7 @@ export function LoginForm({ next, error: paramError }: { next: string; error?: s
         <span className="h-px flex-1 bg-line" />
       </div>
 
-      <a
-        href={githubHref}
-        className="flex justify-center border border-line bg-paper px-3 py-2.5 text-sm transition-colors hover:bg-surface"
-      >
+      <a href={githubHref} className={buttonVariants({ variant: "secondary" })}>
         使用 GitHub 登录
       </a>
 
