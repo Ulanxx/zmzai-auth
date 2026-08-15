@@ -19,7 +19,11 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().min(1),
   /** 注册验证邮件（DirectMail SMTP，与 muzhi 同套配置） */
   EMAIL_PROVIDER: z.enum(["smtp", "console"]).default("console"),
-  EMAIL_FROM: z.string().email().optional(),
+  // 允许 "显示名 <email@example.com>" 格式
+  EMAIL_FROM: z
+    .string()
+    .regex(/^[^<]*<[^>@]+@[^>]+>$|^[^@]+@[^@]+$/)
+    .optional(),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().int().positive().default(465),
   SMTP_SECURE: z
