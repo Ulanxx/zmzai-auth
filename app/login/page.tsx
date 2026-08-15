@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { Seal } from "@/components/seal";
 import { Wordmark } from "@/components/wordmark";
 import { getCurrentUser } from "@/providers/auth/session";
 import { safeNext } from "@/providers/auth/redirect";
@@ -24,7 +25,10 @@ export default async function LoginPage({
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-10 px-5 py-16">
-      <Wordmark className="text-lg" />
+      <div className="flex flex-col items-center gap-3">
+        <Seal size={56} />
+        <Wordmark className="text-lg" />
+      </div>
       <LoginForm next={next} error={params.error} />
     </main>
   );
