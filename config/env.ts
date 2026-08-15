@@ -17,6 +17,18 @@ const envSchema = z.object({
   /** GitHub OAuth App 凭据（GitHub 登录用） */
   GITHUB_CLIENT_ID: z.string().min(1),
   GITHUB_CLIENT_SECRET: z.string().min(1),
+  /** 注册验证邮件（DirectMail SMTP，与 muzhi 同套配置） */
+  EMAIL_PROVIDER: z.enum(["smtp", "console"]).default("console"),
+  EMAIL_FROM: z.string().email().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(465),
+  SMTP_SECURE: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((value) => value === "true"),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASSWORD: z.string().optional(),
+  EMAIL_VERIFICATION_TTL_HOURS: z.coerce.number().int().min(1).max(72).default(24),
 });
 
 export type ServerEnv = z.infer<typeof envSchema>;

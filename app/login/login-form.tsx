@@ -99,8 +99,8 @@ export function LoginForm({ next, error: paramError }: { next: string; error?: s
 
       <p className="text-center text-xs text-muted">
         还没有账号？{" "}
-        <a href="https://muzhi.zmzai.cloud/register" className="underline underline-offset-2 hover:text-accent">
-          去 muzhi 注册
+        <a href={`/register${next && next !== "/" ? `?next=${encodeURIComponent(next)}` : ""}`} className="underline underline-offset-2 hover:text-accent">
+          去注册
         </a>
       </p>
     </form>
