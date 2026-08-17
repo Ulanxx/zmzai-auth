@@ -33,6 +33,7 @@ export default async function HomePage({
     <main className="page-shell flex min-h-dvh flex-col py-10">
       <Navbar
         sublabel="auth"
+        brandHref="/"
         badge={<span className="rounded-full border border-line px-2 py-0.5 font-mono text-[11px] text-ink-3">auth.zmzai.cloud</span>}
         actions={<LogoutButton />}
       />

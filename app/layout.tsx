@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description: "zmzai cloud 单点登录认证中心",
 };
 
-export const viewport: Viewport = { themeColor: "#F4EFE6" };
+export const viewport: Viewport = { themeColor: "#FFFFFF" };
 
 export default function RootLayout({
   children,
