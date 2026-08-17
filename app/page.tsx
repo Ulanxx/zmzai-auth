@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Seal } from "@/components/seal";
-import { Wordmark } from "@/components/wordmark";
+import { Logo, Navbar } from "@zmzai/theme";
 import { allProducts, letterProducts, statusLabel } from "@/lib/products";
 import { getCurrentUser } from "@/providers/auth/session";
 import { safeNext } from "@/providers/auth/redirect";
@@ -32,15 +31,16 @@ export default async function HomePage({
 
   return (
     <main className="page-shell flex min-h-dvh flex-col py-10">
-      <header className="flex items-center justify-between border-b-2 border-rule pb-5">
-        <Wordmark />
-        <span className="font-mono text-xs text-muted">auth.zmzai.cloud</span>
-      </header>
+      <Navbar
+        sublabel="auth"
+        badge={<span className="rounded-full border border-line px-2 py-0.5 font-mono text-[11px] text-ink-3">auth.zmzai.cloud</span>}
+        actions={<LogoutButton />}
+      />
 
       <section className="flex flex-col gap-10 pt-16">
-        {/* 问候区 — 朱文方印 + 当前登录身份 */}
+        {/* 问候区 — 云朵标 + 当前登录身份 */}
         <div className="flex items-center gap-5">
-          <Seal size={56} className="shrink-0" />
+          <Logo size={56} />
           <div className="flex flex-col gap-1">
             <p className="eyebrow">已登录</p>
             <h1 className="headline text-4xl">你好，{user.name}</h1>

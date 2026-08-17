@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@zmzai/db": "git+https://github.com/Ulanxx/zmzai-db.git",
-    "@zmzai/theme": "^0.2.6",
+    "@zmzai/theme": "^0.2.8",
     "bcryptjs": "3.0.3",
     "mongoose": "8.24.1",
     "next": "15.5.21",
